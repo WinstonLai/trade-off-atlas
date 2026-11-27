@@ -4,7 +4,7 @@ Animated mental models of the trade-offs that keep coming up in project manageme
 
 Each trade-off has its own page with an animation that auto-plays a short scenario, sliders to explore it yourself, and a short guide: what pulls against what, how to use it, an example, and what to watch out for.
 
-**Live site:** https://winstonlai.github.io/Trade-off_Atlas/
+**Live site:** https://winstonlai.github.io/trade-off-atlas/
 
 ## What's inside
 

@@ -34,4 +34,4 @@ A `Stop` hook (`.claude/settings.json`, script in `.claude/hooks/check-docs.sh`)
 
 **Styling.** All in `assets/css/site.css`: light/dark design tokens, with the theme toggled through `data-theme` on `<html>` (persisted in `localStorage`, applied by an inline script in `<head>` to avoid a flash). The body class `cat-<id>` selects the category accent color. Animations use CSS variables (`--s1`, `--s2`, `--ink`, `--muted`, `--line`, `--surface`) rather than hard-coded colors so both themes work.
 
-**Paths.** Pages in `tradeoffs/` set `data-root=".."` on `<body>`, and `site.js` builds links from it. The home page uses `.`. Keep asset and link paths relative so the site works under the `/Trade-off_Atlas/` GitHub Pages subpath.
+**Paths.** Pages in `tradeoffs/` set `data-root=".."` on `<body>`, and `site.js` builds links from it. The home page uses `.`. Keep asset and link paths relative so the site works under the `/trade-off-atlas/` GitHub Pages subpath.
