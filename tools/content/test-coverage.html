@@ -1,0 +1,30 @@
+<!--meta {"title": "Test coverage: confidence vs. cost", "cat": "sw", "lede": "The first tests catch the most bugs for the least effort. Each extra percent of coverage costs more and catches less, and even 100% coverage doesn't mean the code is right. How far to go depends on what an escaped bug costs.", "vs": ["Bugs caught", "Testing effort"]}-->
+<section>
+  <h2>The trade-off</h2>
+  <p>Code coverage measures how much of the code runs during the tests. Raising it catches bugs before users see them, but the returns fall off. The first tests exercise the main paths, where most bugs live. Later tests chase error handling, odd branches and code that is awkward to reach, and they cost more to write and to keep up to date every time the code changes.</p>
+  <p>Coverage is also only a proxy. A line can run during a test without any assertion checking that it did the right thing, so <strong>100% coverage still lets bugs through</strong>. Google's testing guidance treats about 60% as acceptable, 75% as commendable and 90% as exemplary, and warns against fixed targets for every project. The right level depends on the cost of an escaped bug: a payments system and a weekend prototype should not have the same target.</p>
+</section>
+<section>
+  <h2>How to use it</h2>
+  <ol>
+    <li><strong>Test the risky parts first.</strong> Core business logic, money, security and anything that has broken before.</li>
+    <li><strong>Use coverage to find gaps, not as a score.</strong> Look at which important code isn't tested, rather than at the overall percentage.</li>
+    <li><strong>Check test quality too.</strong> Mutation testing (deliberately breaking the code to see if tests fail) shows whether tests actually check anything.</li>
+    <li><strong>Set the bar per component.</strong> Stricter for critical paths, looser for glue code and experiments.</li>
+  </ol>
+</section>
+<section>
+  <h2>Example</h2>
+  <div class="callout">
+    <p>A team was told to reach 90% coverage across every service. Developers wrote tests for getters and configuration code to hit the number, while the billing module stayed at 70% because its edge cases were hard to set up. After a billing incident, the team dropped the global target, required 90% only for billing and authentication, and used the freed time to add mutation testing there.</p>
+  </div>
+</section>
+<section>
+  <h2>Watch out for</h2>
+  <ul>
+    <li><strong>The curves here are a toy model.</strong> How fast returns fall depends on the code and on how good the tests are.</li>
+    <li><strong>Goodhart's law.</strong> Once coverage becomes a target, people write tests to raise it rather than to find bugs.</li>
+    <li><strong>Brittle tests.</strong> Tests that check implementation details break on every refactor, which adds cost without catching real bugs.</li>
+    <li>Related: chasing a metric instead of the goal is <a href="proxy-metrics.html">proxy metrics vs. the real goal</a>, the same U-shaped cost is in <a href="cost-of-quality.html">prevention vs. failure</a>, and skipping tests to go faster is <a href="technical-debt.html">technical debt</a>.</li>
+  </ul>
+</section>

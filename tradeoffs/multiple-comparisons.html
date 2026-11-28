@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>More metrics vs. false discoveries (multiple comparisons) · Trade-off Atlas</title>
+  <meta name="description" content="Each metric you test has a small chance of looking significant by luck. Test enough of them and a false win becomes likely. Corrections bring that chance back down, but they also make real effects harder to find.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-ds" data-root=".." data-slug="multiple-comparisons">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#ds">Data science</a></nav>
+    <header class="hero">
+      <span class="tag">Data science</span>
+      <h1>More metrics vs. false discoveries (multiple comparisons)</h1>
+      <p class="lede">Each metric you test has a small chance of looking significant by luck. Test enough of them and a false win becomes likely. Corrections bring that chance back down, but they also make real effects harder to find.</p>
+      <div class="vs"><span>Discoveries</span><i>vs.</i><span>False alarms</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>A significance test at the 5% level is designed so that, when nothing is really going on, it says "significant" one time in twenty. That's fine for one pre-chosen test. But experiments rarely track one metric: there are conversion, revenue, retention, clicks, each split by device and country. Test 20 independent metrics with no real effect and the chance that <strong>at least one</strong> looks significant is 1 − 0.95<sup>20</sup>, about 64%. Somebody will find a "win".</p>
+        <p>Corrections fix this by raising the bar. The <strong>Bonferroni</strong> correction tests each of m metrics at 5% ÷ m, which keeps the chance of any false alarm under 5%, but makes real effects much harder to detect. The <strong>Benjamini–Hochberg</strong> procedure (1995) controls something different: the expected share of discoveries that are false (the false discovery rate). It allows a few more false alarms in exchange for finding more real effects, which is why it's standard in genomics and widely used for experiment dashboards. Either way, <strong>looking at more things costs you</strong>, in false alarms or in power.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Pick one primary metric in advance.</strong> It gets the full 5% test. Everything else is supporting evidence.</li>
+          <li><strong>Correct when you scan many metrics.</strong> Bonferroni when any false claim is costly, Benjamini–Hochberg when you're screening for leads.</li>
+          <li><strong>Count every comparison you made.</strong> Segments, time windows and metrics you checked but didn't report all count.</li>
+          <li><strong>Treat surprising secondary wins as hypotheses.</strong> Confirm them with a new experiment before acting.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A new onboarding flow showed no change in sign-ups, but the dashboard highlighted a significant rise in sign-ups from tablets in Germany. Across the 40 device-and-country segments being checked, one or two such results were expected by chance. The team reran the test with German tablet users as the pre-registered segment, and the effect disappeared.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The model here simplifies.</strong> It assumes independent metrics and a fixed share of real effects. Correlated metrics inflate false alarms less than the formula suggests.</li>
+          <li><strong>The garden of forking paths.</strong> Andrew Gelman's term for the many analysis choices (which outliers to drop, which period to use) that act like extra comparisons even when only one test is run.</li>
+          <li><strong>Over-correcting.</strong> Bonferroni across hundreds of metrics can make it nearly impossible to detect anything. Decide in advance which questions matter.</li>
+          <li>Related: false alarms vs. misses for one test is <a href="significance-power.html">significance vs. power</a>, the timing version of this problem is <a href="peeking-early-stopping.html">peeking vs. valid results</a>, and gaming a metric is <a href="proxy-metrics.html">proxy metrics vs. the real goal</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/multiple-comparisons.js"></script>
+</body>
+</html>

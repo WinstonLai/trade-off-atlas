@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample size: precision vs. cost · Trade-off Atlas</title>
+  <meta name="description" content="More data makes an estimate more precise, but with steeply falling returns: halving the margin of error takes four times the sample. The right size depends on the smallest difference that would change your decision.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-ds" data-root=".." data-slug="sample-size">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#ds">Data science</a></nav>
+    <header class="hero">
+      <span class="tag">Data science</span>
+      <h1>Sample size: precision vs. cost</h1>
+      <p class="lede">More data makes an estimate more precise, but with steeply falling returns: halving the margin of error takes four times the sample. The right size depends on the smallest difference that would change your decision.</p>
+      <div class="vs"><span>Precision</span><i>vs.</i><span>Cost</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>The random error in an estimate shrinks with the <strong>square root</strong> of the sample size. For a survey result near 50%, the 95% margin of error is roughly ±98/√n percentage points: about ±14 with 50 responses, ±5 with 385, ±2.5 with about 1,500 and ±1 with nearly 10,000. Cost, on the other hand, usually grows in a straight line with n. So the first few hundred responses buy a lot of precision, and every halving of the margin after that costs four times as much.</p>
+        <p>That makes "how big a sample?" a business question as much as a statistical one. The useful starting point is the <strong>smallest difference that would change what you do</strong>. If you'll act only on a 10-point gap, a few hundred responses is enough and thousands is waste. If a 1-point change in conversion is worth millions, a huge sample is cheap by comparison. Power analysis formalises this for experiments: pick the effect size worth detecting, then compute the n that detects it reliably.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Start from the decision.</strong> What difference matters? What happens if you're wrong?</li>
+          <li><strong>Work out the required n before collecting data.</strong> Collecting until the result looks good is a different, and biased, procedure.</li>
+          <li><strong>Spend on quality once n is enough.</strong> Past a few thousand, improving who responds usually helps more than more responses.</li>
+          <li><strong>Size for subgroups if you'll report them.</strong> A good margin overall can become a poor one for each region or segment.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A team planned a 10,000-person survey to choose between two pricing pages. Asked what result would change their decision, they agreed that only a gap of 10 points or more would matter. About 400 responses per page was enough to see that, which cut the cost by over 90%. They spent part of the savings on recruiting a sample that actually matched their customer base.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>Margin of error covers only random error.</strong> It says nothing about bias. In 1936 the <em>Literary Digest</em> poll collected over two million responses and still called the US presidential election badly wrong, because of who it asked.</li>
+          <li><strong>The formula assumes a simple random sample.</strong> Clustered or weighted samples have larger real margins.</li>
+          <li><strong>Huge samples make tiny effects "significant".</strong> With enough data, a meaningless difference passes a significance test. Look at the size of the effect too.</li>
+          <li>Related: error rates in experiments are <a href="significance-power.html">significance vs. power</a>, how to divide the data you have is <a href="train-test-split.html">training vs. test data</a>, and checking results as data comes in is <a href="peeking-early-stopping.html">peeking vs. valid results</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/sample-size.js"></script>
+</body>
+</html>

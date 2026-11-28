@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compression: ratio vs. CPU speed · Trade-off Atlas</title>
+  <meta name="description" content="Stronger compression makes files smaller, so they are cheaper to store and faster to move. It also takes more CPU to write and sometimes to read. Which codec wins depends on how fast the link is and how often the data is read.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-de" data-root=".." data-slug="compression-speed">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#de">Data engineering</a></nav>
+    <header class="hero">
+      <span class="tag">Data engineering</span>
+      <h1>Compression: ratio vs. CPU speed</h1>
+      <p class="lede">Stronger compression makes files smaller, so they are cheaper to store and faster to move. It also takes more CPU to write and sometimes to read. Which codec wins depends on how fast the link is and how often the data is read.</p>
+      <div class="vs"><span>Smaller files</span><i>vs.</i><span>CPU time</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>Every compression codec trades CPU for bytes. Fast codecs like LZ4 and Snappy roughly halve typical data while barely touching the CPU. Zstandard (Zstd) at low levels compresses noticeably better for a small extra cost. High levels of Zstd, and older codecs like gzip, squeeze out more, but compression can be tens or hundreds of times slower. Decompression is usually much faster than compression, though gzip is slow at both.</p>
+        <p>Whether the extra squeeze pays off depends on the rest of the pipeline. If the bottleneck is the network or disk, fewer bytes means less waiting, and the saving is repeated <strong>every time the data is read</strong>. If the storage is fast local SSD and the data is read once, any compression can cost more time than it saves, though it still saves storage. That is why columnar formats such as Parquet commonly default to Snappy or Zstd at low levels, and why archives use the highest levels: <strong>written once, stored for years, read rarely</strong>.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Find the bottleneck.</strong> If jobs are waiting on I/O, compress harder. If they're CPU-bound, compress less.</li>
+          <li><strong>Count the reads.</strong> Data that is written once and read many times justifies a slower, stronger codec.</li>
+          <li><strong>Separate hot and cold data.</strong> Fast codecs for data being actively processed, strong ones for archives.</li>
+          <li><strong>Benchmark on your own data.</strong> Ratios vary hugely: logs and JSON compress well, images and already-compressed files barely at all.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A data team stored its event tables as gzip-compressed JSON. Queries were slow because every read decompressed the files on a single core. Moving to Parquet with Zstd at level 3 made the files slightly smaller and queries several times faster. For the seven-year compliance archive, which is almost never read, they used Zstd at its highest level, which cut the storage bill by a further fifth.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The numbers here are illustrative.</strong> Codec speeds and ratios depend on the data, the hardware and the library version. Measure before you switch.</li>
+          <li><strong>Splittability.</strong> A single large gzip file can't be read in parallel. Formats like Parquet compress in blocks so many workers can read one file.</li>
+          <li><strong>Cost isn't only time.</strong> Cloud storage and network egress are billed by the byte, so a better ratio can pay for itself even when it's slower.</li>
+          <li>Related: storage layout is <a href="row-column.html">row vs. column storage</a>, file layout is <a href="file-size.html">many small vs. few large files</a>, and spending CPU to save storage, or the reverse, is <a href="time-space.html">time vs. space</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/compression-speed.js"></script>
+</body>
+</html>

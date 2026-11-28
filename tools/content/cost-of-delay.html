@@ -1,0 +1,31 @@
+<!--meta {"title": "Cost of delay: value vs. job size (WSJF)", "cat": "pm", "lede": "Every week a valuable piece of work sits in the queue, its value leaks away. Doing the most valuable job first or the quickest job first both ignore half the picture. Dividing urgency by duration loses the least.", "vs": ["Value", "Duration"]}-->
+<section>
+  <h2>The trade-off</h2>
+  <p>A team can only work on one thing at a time, so the order of the queue decides how long everything else waits. Don Reinertsen calls the value lost per week of waiting the <strong>cost of delay</strong>: a feature that would earn $10k a week costs $10k for every week it isn't shipped. Seen this way, the question is not "what's most important?" but "what order loses the least while we wait?"</p>
+  <p>The two obvious rules each miss something. <em>Highest value first</em> starts a big, valuable job and makes every quick win wait months behind it. <em>Shortest first</em> clears small jobs fast but happily leaves a hugely urgent job until last. Ordering by <strong>cost of delay divided by duration</strong>, known as weighted shortest job first (WSJF), balances the two. For a single team working through a fixed queue it is provably the order with the least total delay cost (Smith's rule from scheduling theory). The catch is that both inputs are estimates, and cost of delay is the harder one to estimate.</p>
+</section>
+<section>
+  <h2>How to use it</h2>
+  <ol>
+    <li><strong>Put a rough price on waiting.</strong> Ask "what do we lose per week this isn't done?" in money, customers or risk. Relative numbers (1, 2, 5, 10) are enough.</li>
+    <li><strong>Estimate duration just as roughly.</strong> The ratio matters, not the precision.</li>
+    <li><strong>Sort by the ratio.</strong> Do the highest cost-of-delay-per-week-of-work first.</li>
+    <li><strong>Split big jobs.</strong> A large job with a small high-value slice can ship that slice first and jump the queue.</li>
+    <li><strong>Re-sort when things change.</strong> A deadline, a competitor or a new customer changes cost of delay overnight.</li>
+  </ol>
+</section>
+<section>
+  <h2>Example</h2>
+  <div class="callout">
+    <p>A team has a three-week API that a partner is waiting for, an eight-week platform rebuild, a one-day fix and a four-week report. They planned to start the rebuild because it's "the most important". Pricing the delay shows the API is losing $6k a week and the fix $2k a week, so both go first. The rebuild starts four weeks later and the quarter loses about a fifth less value to waiting.</p>
+  </div>
+</section>
+<section>
+  <h2>Watch out for</h2>
+  <ul>
+    <li><strong>The numbers here are a toy model.</strong> Real cost of delay is rarely constant: some work is worthless after a deadline, and some barely loses value at all.</li>
+    <li><strong>False precision.</strong> WSJF scores built from made-up numbers can look rigorous. Use it to start a conversation about urgency, not to end one.</li>
+    <li><strong>Small jobs can starve big ones.</strong> If big jobs never rise to the top, check whether their cost of delay is really that low, or whether they should be split.</li>
+    <li>Related: how much work to move through at once is <a href="batch-size.html">batch size</a>, too many jobs in flight is <a href="wip-focus.html">parallel work vs. focus</a>, and the value of waiting for information is <a href="commit-optionality.html">commit early vs. keep options open</a>.</li>
+  </ul>
+</section>

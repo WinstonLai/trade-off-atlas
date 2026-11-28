@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Duplication vs. the wrong abstraction · Trade-off Atlas</title>
+  <meta name="description" content="Merging similar code into one shared piece means each change is made once. But if the callers&#x27; needs drift apart, the shared code fills up with flags and special cases, and becomes harder to change than the copies ever were.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-sw" data-root=".." data-slug="duplication-abstraction">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#sw">Software development</a></nav>
+    <header class="hero">
+      <span class="tag">Software development</span>
+      <h1>Duplication vs. the wrong abstraction</h1>
+      <p class="lede">Merging similar code into one shared piece means each change is made once. But if the callers' needs drift apart, the shared code fills up with flags and special cases, and becomes harder to change than the copies ever were.</p>
+      <div class="vs"><span>Duplication</span><i>vs.</i><span>Abstraction</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>"Don't repeat yourself" (DRY) is one of the first rules programmers learn: if the same logic appears in several places, extract it so a change is made once. When the copies really do change together, this is a clear win. Every shared fix is one edit instead of several, and nobody forgets one of the copies.</p>
+        <p>The trouble starts when code that <em>looks</em> the same serves needs that later diverge. Each new special case gets a parameter or a flag, each change has to work for every caller, and the shared function becomes the hardest code in the system to touch. Sandi Metz summed this up as <strong>"duplication is far cheaper than the wrong abstraction"</strong>. So the decision isn't "is this repeated?" but "will these pieces change for the same reasons?" Many teams follow the <em>rule of three</em>: tolerate one duplicate, and abstract when a third copy shows what is really shared.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Ask why the code changes.</strong> If two copies change for the same business reason, share them. If they only look alike, they may be coincidentally similar.</li>
+          <li><strong>Wait for the third case.</strong> Two examples rarely show which parts are truly common.</li>
+          <li><strong>Watch for flags.</strong> Boolean parameters that switch behaviour per caller are a sign that an abstraction is serving too many masters.</li>
+          <li><strong>Be willing to inline it again.</strong> Copying a bad abstraction back into each caller, then simplifying each copy, is a legitimate refactoring.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>Three services formatted invoices with nearly identical code, so a developer merged them into one shared library. A year later, one service needed tax rules for a new country, another needed a different currency format, and the third needed a legal footer. The library grew twelve options, and every release needed sign-off from all three teams. The teams eventually copied the code back and each deleted the options it didn't use, which left three short, simple formatters.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The numbers here come from a toy model.</strong> Real effort depends on how big the code is and how well the abstraction was designed.</li>
+          <li><strong>Duplicated bugs.</strong> Copies don't just share features: a bug in one is probably in all of them. Security-critical logic is usually worth sharing even when it's awkward.</li>
+          <li><strong>Sunk cost.</strong> The longer an abstraction has existed, the harder it feels to undo. That isn't a reason to keep it.</li>
+          <li>Related: building for future needs is <a href="flexibility-simplicity.html">flexibility vs. simplicity</a>, the long-term cost of shortcuts is <a href="technical-debt.html">technical debt</a>, and splitting code into services is <a href="monolith-microservices.html">monolith vs. microservices</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/duplication-abstraction.js"></script>
+</body>
+</html>

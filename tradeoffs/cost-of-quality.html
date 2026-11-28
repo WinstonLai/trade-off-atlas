@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prevention vs. failure (cost of quality) · Trade-off Atlas</title>
+  <meta name="description" content="Money spent on reviews, testing and good process prevents failures that cost far more later. But past a point, each extra check costs more than the failures it prevents. The best level depends on how expensive an escaped defect is.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-pm" data-root=".." data-slug="cost-of-quality">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#pm">Project management</a></nav>
+    <header class="hero">
+      <span class="tag">Project management</span>
+      <h1>Prevention vs. failure (cost of quality)</h1>
+      <p class="lede">Money spent on reviews, testing and good process prevents failures that cost far more later. But past a point, each extra check costs more than the failures it prevents. The best level depends on how expensive an escaped defect is.</p>
+      <div class="vs"><span>Prevention and testing</span><i>vs.</i><span>Cost of failures</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>The <strong>cost of quality</strong> model, developed by Armand Feigenbaum and Joseph Juran in the 1950s, splits quality spending into four buckets. <em>Prevention</em> (training, design reviews, standards) and <em>appraisal</em> (inspection and testing) are the costs of getting it right. <em>Internal failure</em> (rework before release) and <em>external failure</em> (defects customers find: support, refunds, recalls, lost trust) are the costs of getting it wrong.</p>
+        <p>Spending more on the first two shrinks the second two, and the effect is lopsided: a defect found by a customer usually costs many times more than one caught in a review. So skimping on prevention is a false economy. But the curve turns. Once most defects are prevented or caught, <strong>each extra check catches less and still costs the same</strong>, and total cost starts rising again. The sweet spot sits further right when escaped defects are expensive (payments, medical, safety) and further left when they are cheap to fix after release (internal tools, prototypes).</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Track failure costs, not just quality spend.</strong> Rework, incidents, support load and churn are the other half of the equation, and they are usually spread across other budgets.</li>
+          <li><strong>Estimate what an escaped defect costs here.</strong> That multiplier, more than anything else, sets how much prevention is worth.</li>
+          <li><strong>Shift effort earlier.</strong> Reviews, clear requirements and automated checks catch defects when they are cheapest.</li>
+          <li><strong>Stop when the next check finds little.</strong> If a review stage rarely catches anything, it may be past the bottom of the curve.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A team cut its test phase to hit a launch date. In the following quarter, a fifth of its time went on hotfixes and support escalations. The next release added design reviews and automated regression tests for about 8% of the effort, and failure costs fell by more than that. A later proposal for a third manual sign-off stage was dropped: it would have caught almost nothing the automated tests missed.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The curves here are illustrative.</strong> Real failure costs are lumpy: one escaped defect can cost more than everything else combined.</li>
+          <li><strong>"Zero defects" thinking.</strong> Philip Crosby argued that prevention always pays for itself. That holds in many manufacturing settings, but in software some defects are cheaper to fix in production than to prevent.</li>
+          <li><strong>Hidden failure costs.</strong> Lost trust and churn rarely show up on a project budget, so the curve usually looks cheaper on the left than it really is.</li>
+          <li>Related: deferred quality work compounds as <a href="technical-debt.html">technical debt</a>, the same U-shape appears in <a href="test-coverage.html">test coverage</a>, and spending on quality is one side of the <a href="project-triangle.html">project management triangle</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/cost-of-quality.js"></script>
+</body>
+</html>
