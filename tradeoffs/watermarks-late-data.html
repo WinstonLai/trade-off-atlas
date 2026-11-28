@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Watermarks: latency vs. completeness · Trade-off Atlas</title>
+  <meta name="description" content="A streaming job has to decide when a time window is finished, even though some of its events are still on their way. Close it early and results are fast but incomplete. Wait longer and they&#x27;re complete but stale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-de" data-root=".." data-slug="watermarks-late-data">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#de">Data engineering</a></nav>
+    <header class="hero">
+      <span class="tag">Data engineering</span>
+      <h1>Watermarks: latency vs. completeness</h1>
+      <p class="lede">A streaming job has to decide when a time window is finished, even though some of its events are still on their way. Close it early and results are fast but incomplete. Wait longer and they're complete but stale.</p>
+      <div class="vs"><span>Fresh results</span><i>vs.</i><span>Complete results</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>Streaming systems often group events by when they happened (event time), such as "orders placed between 10:00 and 10:01". But events don't arrive in order. A server might deliver them within a second, while a phone that lost signal in a tunnel might send them minutes later. The job can't wait forever, so it uses a <strong>watermark</strong>: an estimate that says "events older than this have probably all arrived". When the watermark passes the end of a window, the window's result is published.</p>
+        <p>Set the watermark tight and results come out quickly, but late events are missed. Set it loose and results are more complete, but every result is delayed by the same amount. With a long tail of very late events, no wait is long enough to catch them all. This trade-off is at the heart of the Dataflow model (Akidau and colleagues, 2015), which Apache Beam, Flink and Spark Structured Streaming all build on. The usual way out is to <strong>publish early and correct later</strong>: emit a result at the watermark, then send updated results as late events arrive, up to an "allowed lateness" limit.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Measure lateness.</strong> Plot how late events actually arrive. The shape of the tail decides how much a longer wait buys.</li>
+          <li><strong>Ask what consumers need.</strong> A live dashboard wants speed; a billing report wants completeness.</li>
+          <li><strong>Use corrections if downstream can handle them.</strong> Updated results need consumers that can overwrite or add up revisions.</li>
+          <li><strong>Decide what happens to very late data.</strong> Drop it, send it to a side output, or reconcile it in a nightly batch job.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A ride-hailing app counts trips per minute per city. With a 5-second watermark, the dashboard looked live, but finance found that minute-level totals were 15% short, because drivers' phones often uploaded trips after reconnecting. The team kept the 5-second watermark for the dashboard, added corrections for up to an hour of lateness, and recomputed daily totals in a batch job for finance.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The lateness patterns here are made up.</strong> Real ones vary by source and by time of day, and can change suddenly, for example after an outage.</li>
+          <li><strong>Idle sources hold back watermarks.</strong> If one partition stops sending data, a watermark based on the slowest source can stall the whole job.</li>
+          <li><strong>Corrections need storage.</strong> Keeping windows open for late data means keeping their state, which costs memory.</li>
+          <li>Related: whether to stream at all is <a href="batch-streaming.html">batch vs. streaming</a>, what happens when messages are retried is <a href="delivery-guarantees.html">delivery guarantees</a>, and trading accuracy for speed is <a href="exact-approximate.html">exact vs. approximate</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/watermarks-late-data.js"></script>
+</body>
+</html>

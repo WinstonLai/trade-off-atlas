@@ -1,0 +1,30 @@
+<!--meta {"title": "Security vs. usability", "cat": "sw", "lede": "Each security control adds protection and friction. A few well-chosen ones raise security a lot. Pile on too many and people work around them, so real security falls even as the rules get stricter.", "vs": ["Protection", "Ease of use"]}-->
+<section>
+  <h2>The trade-off</h2>
+  <p>Longer passwords, frequent changes, extra login prompts, short session timeouts and locked-down file sharing all make a system harder to break into, on paper. They also cost time and patience. Up to a point, people accept the cost and protection rises. Past it, they find ways around: passwords written on sticky notes, shared accounts, files emailed to personal addresses, the same password with a number at the end.</p>
+  <p>Anne Adams and Angela Sasse's 1999 paper "Users are not the enemy" documented this: rules that ignore how people work get bypassed, and the workarounds are often worse than no rule. In 2017 the US standards body NIST revised its password guidance (SP 800-63B) to drop mandatory periodic changes and complex composition rules for the same reason. So <strong>real security is protection on paper multiplied by how many people actually follow it</strong>. The best way to improve both is better design: passkeys, single sign-on, password managers, and prompts that appear only when a login looks risky.</p>
+</section>
+<section>
+  <h2>How to use it</h2>
+  <ol>
+    <li><strong>Measure workarounds.</strong> Shared accounts, password resets and shadow IT show where friction is too high.</li>
+    <li><strong>Spend friction where the risk is.</strong> Ask for extra verification on payments and admin actions, not on every page view.</li>
+    <li><strong>Replace rules with better tools.</strong> A password manager or passkey is both safer and easier than a complex password rule.</li>
+    <li><strong>Make the secure path the easy path.</strong> If the approved file-sharing tool is slower than email, people will use email.</li>
+  </ol>
+</section>
+<section>
+  <h2>Example</h2>
+  <div class="callout">
+    <p>A company required password changes every 30 days and a 15-minute session timeout. The help desk handled hundreds of reset requests a month, and an audit found that most new passwords were the old one with a changed digit. It switched to single sign-on with passkeys, longer sessions on managed devices, and an extra check only for unusual logins. Reset requests fell sharply, and phishing tests showed fewer accounts compromised.</p>
+  </div>
+</section>
+<section>
+  <h2>Watch out for</h2>
+  <ul>
+    <li><strong>The curves here are illustrative.</strong> The workaround threshold depends on the people, the task and the culture.</li>
+    <li><strong>Usability isn't permission to skip controls.</strong> Some friction is necessary. The goal is the most real protection, not the least friction.</li>
+    <li><strong>Attackers aren't affected by friction.</strong> Controls that only slow down honest users, like security questions with guessable answers, add cost without much protection.</li>
+    <li>Related: options vs. ease is <a href="flexibility-simplicity.html">flexibility vs. simplicity</a>, protection vs. usefulness for data is <a href="privacy-utility.html">privacy vs. utility</a>, and buying a solution instead of building one is <a href="build-buy.html">build vs. buy</a>.</li>
+  </ul>
+</section>

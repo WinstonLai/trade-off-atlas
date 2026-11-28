@@ -1,0 +1,30 @@
+<!--meta {"title": "Watermarks: latency vs. completeness", "cat": "de", "lede": "A streaming job has to decide when a time window is finished, even though some of its events are still on their way. Close it early and results are fast but incomplete. Wait longer and they're complete but stale.", "vs": ["Fresh results", "Complete results"]}-->
+<section>
+  <h2>The trade-off</h2>
+  <p>Streaming systems often group events by when they happened (event time), such as "orders placed between 10:00 and 10:01". But events don't arrive in order. A server might deliver them within a second, while a phone that lost signal in a tunnel might send them minutes later. The job can't wait forever, so it uses a <strong>watermark</strong>: an estimate that says "events older than this have probably all arrived". When the watermark passes the end of a window, the window's result is published.</p>
+  <p>Set the watermark tight and results come out quickly, but late events are missed. Set it loose and results are more complete, but every result is delayed by the same amount. With a long tail of very late events, no wait is long enough to catch them all. This trade-off is at the heart of the Dataflow model (Akidau and colleagues, 2015), which Apache Beam, Flink and Spark Structured Streaming all build on. The usual way out is to <strong>publish early and correct later</strong>: emit a result at the watermark, then send updated results as late events arrive, up to an "allowed lateness" limit.</p>
+</section>
+<section>
+  <h2>How to use it</h2>
+  <ol>
+    <li><strong>Measure lateness.</strong> Plot how late events actually arrive. The shape of the tail decides how much a longer wait buys.</li>
+    <li><strong>Ask what consumers need.</strong> A live dashboard wants speed; a billing report wants completeness.</li>
+    <li><strong>Use corrections if downstream can handle them.</strong> Updated results need consumers that can overwrite or add up revisions.</li>
+    <li><strong>Decide what happens to very late data.</strong> Drop it, send it to a side output, or reconcile it in a nightly batch job.</li>
+  </ol>
+</section>
+<section>
+  <h2>Example</h2>
+  <div class="callout">
+    <p>A ride-hailing app counts trips per minute per city. With a 5-second watermark, the dashboard looked live, but finance found that minute-level totals were 15% short, because drivers' phones often uploaded trips after reconnecting. The team kept the 5-second watermark for the dashboard, added corrections for up to an hour of lateness, and recomputed daily totals in a batch job for finance.</p>
+  </div>
+</section>
+<section>
+  <h2>Watch out for</h2>
+  <ul>
+    <li><strong>The lateness patterns here are made up.</strong> Real ones vary by source and by time of day, and can change suddenly, for example after an outage.</li>
+    <li><strong>Idle sources hold back watermarks.</strong> If one partition stops sending data, a watermark based on the slowest source can stall the whole job.</li>
+    <li><strong>Corrections need storage.</strong> Keeping windows open for late data means keeping their state, which costs memory.</li>
+    <li>Related: whether to stream at all is <a href="batch-streaming.html">batch vs. streaming</a>, what happens when messages are retried is <a href="delivery-guarantees.html">delivery guarantees</a>, and trading accuracy for speed is <a href="exact-approximate.html">exact vs. approximate</a>.</li>
+  </ul>
+</section>

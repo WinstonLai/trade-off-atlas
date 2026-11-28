@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peeking vs. valid results (early stopping in A/B tests) · Trade-off Atlas</title>
+  <meta name="description" content="Checking an A/B test every day and stopping as soon as it looks significant feels efficient. But each look is another chance for noise to cross the line, so false wins pile up. Sequential designs let you peek without that cost.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+</head>
+<body class="cat-ds" data-root=".." data-slug="peeking-early-stopping">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 25 23H3Z" fill="none" stroke="var(--pm)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="16" r="3.4" fill="var(--sw)"/></svg>
+        Trade-off Atlas
+      </a>
+      <div class="site-nav">
+        <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Browse by topic">
+      <div class="wrap">
+        <a href="../index.html">All topics</a>
+        <a class="cat-pm" href="../index.html#pm"><span class="dot"></span>Project management</a>
+        <a class="cat-bc" href="../index.html#bc"><span class="dot"></span>Business communication</a>
+        <a class="cat-sw" href="../index.html#sw"><span class="dot"></span>Software development</a>
+        <a class="cat-de" href="../index.html#de"><span class="dot"></span>Data engineering</a>
+        <a class="cat-ds" href="../index.html#ds"><span class="dot"></span>Data science</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">All trade-offs</a> / <a href="../index.html#ds">Data science</a></nav>
+    <header class="hero">
+      <span class="tag">Data science</span>
+      <h1>Peeking vs. valid results (early stopping in A/B tests)</h1>
+      <p class="lede">Checking an A/B test every day and stopping as soon as it looks significant feels efficient. But each look is another chance for noise to cross the line, so false wins pile up. Sequential designs let you peek without that cost.</p>
+      <div class="vs"><span>Stopping early</span><i>vs.</i><span>Valid results</span></div>
+    </header>
+
+    <figure class="anim" id="anim"><noscript><p style="padding:20px">Turn on JavaScript to see the animation.</p></noscript></figure>
+
+    <article class="prose">
+      <section>
+        <h2>The trade-off</h2>
+        <p>A standard significance test assumes you decide the sample size in advance and look once, at the end. In practice, people watch the dashboard. If the result crosses p &lt; 0.05 on day six, it's tempting to stop and ship. The problem is that, even with no real difference, the test statistic wanders up and down as data comes in, and <strong>each look is another chance for it to wander over the line</strong>. Peter Armitage and colleagues showed in 1969 that five looks push the false-positive rate from 5% to about 14%, and with daily looks it approaches one in four.</p>
+        <p>Stopping early is still valuable: a test with a clear winner shouldn't run for weeks, and a harmful change should be stopped fast. <strong>Sequential designs</strong> make this safe by setting a stricter bar for each look so that the overall false-positive rate stays at 5%. Stuart Pocock's design uses the same strict bar at every look. Peter O'Brien and Thomas Fleming's design is very strict early and close to the normal bar at the end, so it rarely stops early on noise and loses almost nothing at the final analysis. Many experimentation platforms now offer sequential tests or "always valid" p-values for exactly this reason.</p>
+      </section>
+      <section>
+        <h2>How to use it</h2>
+        <ol>
+          <li><strong>Fix the sample size or the stopping rule in advance.</strong> Either look once at the planned end, or use a design that accounts for looks.</li>
+          <li><strong>Separate monitoring from deciding.</strong> Watching for bugs and serious harm is fine. Declaring a winner is what needs the correction.</li>
+          <li><strong>Use a sequential test if you'll stop early.</strong> O'Brien–Fleming boundaries are a good default when early stopping is a bonus, not the goal.</li>
+          <li><strong>Be suspicious of big early effects.</strong> Results that stop early tend to overstate the effect, because they stopped when noise happened to be favourable.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <div class="callout">
+          <p>A growth team ran dozens of tests a quarter and stopped each one as soon as it reached significance. About a third of their "winners" failed to show any lift when shipped. They moved to a sequential design with O'Brien–Fleming boundaries: tests with large effects still stopped in the first week, but the share of winners that held up after launch rose sharply.</p>
+        </div>
+      </section>
+      <section>
+        <h2>Watch out for</h2>
+        <ul>
+          <li><strong>The rates here come from a simulation.</strong> They use 2,000 simulated tests per setting, so they wobble by about a point.</li>
+          <li><strong>Peeking isn't only stopping.</strong> Extending a test because it's "nearly significant" inflates errors too.</li>
+          <li><strong>Novelty effects.</strong> Stopping in the first days can capture curiosity about something new rather than its lasting effect.</li>
+          <li>Related: false alarms vs. misses is <a href="significance-power.html">significance vs. power</a>, checking many metrics is <a href="multiple-comparisons.html">more metrics vs. false discoveries</a>, and learning while choosing is <a href="explore-exploit.html">explore vs. exploit</a>.</li>
+        </ul>
+      </section>
+    </article>
+
+    <nav class="related" id="related" aria-label="Related trade-offs"></nav>
+    <nav class="pager" id="pager" aria-label="More trade-offs"></nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>Trade-off Atlas: mental models for better decisions. Models are simplified on purpose. Use them to frame the conversation, not to forecast.</p></div>
+  </footer>
+
+  <script src="../assets/js/catalog.js"></script>
+  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/engine.js"></script>
+  <script src="../assets/js/anim/peeking-early-stopping.js"></script>
+</body>
+</html>

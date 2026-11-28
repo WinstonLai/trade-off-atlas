@@ -1,0 +1,30 @@
+<!--meta {"title": "Prevention vs. failure (cost of quality)", "cat": "pm", "lede": "Money spent on reviews, testing and good process prevents failures that cost far more later. But past a point, each extra check costs more than the failures it prevents. The best level depends on how expensive an escaped defect is.", "vs": ["Prevention and testing", "Cost of failures"]}-->
+<section>
+  <h2>The trade-off</h2>
+  <p>The <strong>cost of quality</strong> model, developed by Armand Feigenbaum and Joseph Juran in the 1950s, splits quality spending into four buckets. <em>Prevention</em> (training, design reviews, standards) and <em>appraisal</em> (inspection and testing) are the costs of getting it right. <em>Internal failure</em> (rework before release) and <em>external failure</em> (defects customers find: support, refunds, recalls, lost trust) are the costs of getting it wrong.</p>
+  <p>Spending more on the first two shrinks the second two, and the effect is lopsided: a defect found by a customer usually costs many times more than one caught in a review. So skimping on prevention is a false economy. But the curve turns. Once most defects are prevented or caught, <strong>each extra check catches less and still costs the same</strong>, and total cost starts rising again. The sweet spot sits further right when escaped defects are expensive (payments, medical, safety) and further left when they are cheap to fix after release (internal tools, prototypes).</p>
+</section>
+<section>
+  <h2>How to use it</h2>
+  <ol>
+    <li><strong>Track failure costs, not just quality spend.</strong> Rework, incidents, support load and churn are the other half of the equation, and they are usually spread across other budgets.</li>
+    <li><strong>Estimate what an escaped defect costs here.</strong> That multiplier, more than anything else, sets how much prevention is worth.</li>
+    <li><strong>Shift effort earlier.</strong> Reviews, clear requirements and automated checks catch defects when they are cheapest.</li>
+    <li><strong>Stop when the next check finds little.</strong> If a review stage rarely catches anything, it may be past the bottom of the curve.</li>
+  </ol>
+</section>
+<section>
+  <h2>Example</h2>
+  <div class="callout">
+    <p>A team cut its test phase to hit a launch date. In the following quarter, a fifth of its time went on hotfixes and support escalations. The next release added design reviews and automated regression tests for about 8% of the effort, and failure costs fell by more than that. A later proposal for a third manual sign-off stage was dropped: it would have caught almost nothing the automated tests missed.</p>
+  </div>
+</section>
+<section>
+  <h2>Watch out for</h2>
+  <ul>
+    <li><strong>The curves here are illustrative.</strong> Real failure costs are lumpy: one escaped defect can cost more than everything else combined.</li>
+    <li><strong>"Zero defects" thinking.</strong> Philip Crosby argued that prevention always pays for itself. That holds in many manufacturing settings, but in software some defects are cheaper to fix in production than to prevent.</li>
+    <li><strong>Hidden failure costs.</strong> Lost trust and churn rarely show up on a project budget, so the curve usually looks cheaper on the left than it really is.</li>
+    <li>Related: deferred quality work compounds as <a href="technical-debt.html">technical debt</a>, the same U-shape appears in <a href="test-coverage.html">test coverage</a>, and spending on quality is one side of the <a href="project-triangle.html">project management triangle</a>.</li>
+  </ul>
+</section>
